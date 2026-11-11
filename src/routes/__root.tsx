@@ -35,7 +35,7 @@ function NotFound() {
         <Empty>
           <EmptyHeader>
             <EmptyTitle>
-              <h1>Kota ini belum ada di daftar kami.</h1>
+              <h1>Kota ini belum ada di daftar kami</h1>
             </EmptyTitle>
             <EmptyDescription>Cari lewat tombol kota di atas, atau buka jadwal untuk lokasimu sekarang.</EmptyDescription>
           </EmptyHeader>

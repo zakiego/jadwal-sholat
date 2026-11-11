@@ -93,7 +93,7 @@ function Docs() {
       <SiteHeader />
       <main lang="en" className="flex flex-col gap-16 py-8 sm:py-16">
         <div className="flex max-w-3xl flex-col gap-4">
-          <h1 className="text-[2.5rem] leading-[1.1] font-semibold tracking-[-0.025em] text-balance sm:text-6xl">Prayer times for your app, agent or terminal.</h1>
+          <h1 className="text-[2.5rem] leading-[1.1] font-semibold tracking-[-0.025em] text-balance sm:text-6xl">Prayer times for your app, agent or terminal</h1>
           <p className="text-lg text-muted-foreground">
             Every Indonesian city and regency on the Kemenag RI method, plus any coordinates in the world. No key, no signup, CORS open.
           </p>
