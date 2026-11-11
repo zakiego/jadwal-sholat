@@ -1,12 +1,12 @@
 const pad = (n: number) => String(n).padStart(2, "0")
 
-/** `1 jam 4 menit`, `12 menit`, `kurang dari 1 menit`. */
+/** `1 jam 4 menit`, `12 menit`, `kurang dari 1 menit`. A no-break space keeps each number on its unit's line. */
 export function untilText(seconds: number) {
-  if (seconds < 60) return "kurang dari 1 menit"
+  if (seconds < 60) return "kurang dari 1\u00a0menit"
   const h = Math.floor(seconds / 3600)
   const m = Math.floor((seconds % 3600) / 60)
-  if (h === 0) return `${m} menit`
-  return m === 0 ? `${h} jam` : `${h} jam ${m} menit`
+  if (h === 0) return `${m}\u00a0menit`
+  return m === 0 ? `${h}\u00a0jam` : `${h}\u00a0jam ${m}\u00a0menit`
 }
 
 /** `1:04:09` or `04:09`. */

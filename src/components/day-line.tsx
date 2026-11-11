@@ -91,10 +91,10 @@ export function DayLine({ place, now, eyebrow }: { place: Place; now: number; ey
       </div>
       <p className="hidden gap-6 text-sm text-muted-foreground lg:flex">
         <span>
-          Imsak <span className="text-foreground tabular-nums">{day.times.imsak}</span>
+          Imsak <span className="text-foreground tabular-nums">{day.times.imsak ?? "--:--"}</span>
         </span>
         <span>
-          Dhuha <span className="text-foreground tabular-nums">{day.times.dhuha}</span>
+          Dhuha <span className="text-foreground tabular-nums">{day.times.dhuha ?? "--:--"}</span>
         </span>
       </p>
 

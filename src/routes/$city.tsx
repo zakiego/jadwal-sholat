@@ -1,4 +1,5 @@
-import { createFileRoute, Link, notFound } from "@tanstack/react-router"
+import { createFileRoute, Link, notFound, useNavigate } from "@tanstack/react-router"
+import { applyDataset, DatasetToggle, DATASETS, type Dataset } from "@/dev/break-ui"
 import { DayLine, shortName } from "@/components/day-line"
 import { MonthTable } from "@/components/month-table"
 import { Page, SiteFooter, SiteHeader } from "@/components/site-shell"
@@ -8,6 +9,8 @@ import { pageHead } from "@/lib/seo"
 import { getCityPage } from "@/server/fns"
 
 export const Route = createFileRoute("/$city")({
+  validateSearch: (s: Record<string, unknown>): { data?: Dataset } =>
+    import.meta.env.DEV && DATASETS.includes(s.data as Dataset) ? { data: s.data as Dataset } : {},
   loader: async ({ params }) => {
     const data = await getCityPage({ data: { city: params.city } })
     if (!data) throw notFound()
@@ -30,8 +33,12 @@ export const Route = createFileRoute("/$city")({
 })
 
 function CityPage() {
-  const { place, city, others, now: serverNow } = Route.useLoaderData()
-  const now = useNow(serverNow)
+  const loaded = Route.useLoaderData()
+  const { city, others } = loaded
+  const { data } = Route.useSearch()
+  const navigate = useNavigate({ from: Route.fullPath })
+  const liveNow = useNow(loaded.now)
+  const { place, now } = import.meta.env.DEV && data ? applyDataset(data, loaded.place, liveNow) : { place: loaded.place, now: liveNow }
   const short = shortName(place)
   return (
     <Page>
@@ -66,6 +73,7 @@ function CityPage() {
         )}
       </main>
       <SiteFooter slug={city.slug} />
+      {import.meta.env.DEV && <DatasetToggle value={data ?? "demo"} onChange={(d) => navigate({ search: d === "demo" ? {} : { data: d }, replace: true })} />}
     </Page>
   )
 }
