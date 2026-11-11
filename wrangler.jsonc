@@ -10,6 +10,7 @@
 		"nodejs_compat"
 	],
 	"main": "src/server.ts",
+	"routes": [{ "pattern": "sholat.zakiego.com", "custom_domain": true }],
 	"observability": {
 		"enabled": true
 	},
