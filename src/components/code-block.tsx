@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { CheckIcon, CopyIcon } from "lucide-react"
+import { CopySwapIcon } from "@/components/copy-icon"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 
@@ -21,8 +21,8 @@ export function CodeBlock({ code, label, className }: { code: string; label?: st
       <pre className="overflow-x-auto p-4 pr-12 font-mono text-[13px] leading-relaxed">
         <code>{code}</code>
       </pre>
-      <Button variant="ghost" size="icon-sm" className={cn("absolute right-2", label ? "top-10" : "top-2")} onClick={copy} aria-label={copied ? "Copied" : "Copy code"}>
-        {copied ? <CheckIcon /> : <CopyIcon />}
+      <Button variant="ghost" size="icon-sm" className={cn("absolute right-2", label ? "top-10" : "top-2")} onClick={copy} data-copied={copied ? "" : undefined} aria-label={copied ? "Copied" : "Copy code"}>
+        <CopySwapIcon />
       </Button>
     </div>
   )

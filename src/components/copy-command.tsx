@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { CheckIcon, CopyIcon } from "lucide-react"
+import { CopySwapIcon } from "@/components/copy-icon"
 import { InputGroup, InputGroupAddon, InputGroupButton, InputGroupInput, InputGroupText } from "@/components/ui/input-group"
 import { cn } from "@/lib/utils"
 
@@ -22,8 +22,8 @@ export function CopyCommand({ command, className }: { command: string; className
       </InputGroupAddon>
       <InputGroupInput readOnly value={command} aria-label="Perintah terminal" className="font-mono text-[13px]" onFocus={(e) => e.currentTarget.select()} />
       <InputGroupAddon align="inline-end">
-        <InputGroupButton size="icon-xs" onClick={copy} aria-label={copied ? "Tersalin" : "Salin perintah"}>
-          {copied ? <CheckIcon /> : <CopyIcon />}
+        <InputGroupButton size="icon-xs" onClick={copy} data-copied={copied ? "" : undefined} aria-label={copied ? "Tersalin" : "Salin perintah"}>
+          <CopySwapIcon />
         </InputGroupButton>
       </InputGroupAddon>
     </InputGroup>
