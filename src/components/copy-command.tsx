@@ -22,7 +22,7 @@ export function CopyCommand({ command, className }: { command: string; className
       </InputGroupAddon>
       <InputGroupInput readOnly value={command} aria-label="Perintah terminal" className="font-mono text-[13px]" onFocus={(e) => e.currentTarget.select()} />
       <InputGroupAddon align="inline-end">
-        <InputGroupButton size="icon-xs" onClick={copy} data-copied={copied ? "" : undefined} aria-label={copied ? "Tersalin" : "Salin perintah"}>
+        <InputGroupButton size="icon-sm" onClick={copy} data-copied={copied ? "" : undefined} aria-label={copied ? "Tersalin" : "Salin perintah"}>
           <CopySwapIcon />
         </InputGroupButton>
       </InputGroupAddon>

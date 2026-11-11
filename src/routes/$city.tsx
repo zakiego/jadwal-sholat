@@ -62,8 +62,8 @@ function CityPage() {
             </h2>
             <ul className="grid grid-cols-2 gap-x-4 gap-y-1.5 text-sm sm:grid-cols-3 lg:grid-cols-4">
               {others.map((o) => (
-                <li key={o.slug} className="min-w-0">
-                  <Link to="/$city" params={{ city: o.slug }} className="block truncate rounded-sm text-muted-foreground underline-offset-4 outline-none hover:text-foreground hover:underline focus-visible:ring-3 focus-visible:ring-ring/50">
+                <li key={o.slug}>
+                  <Link to="/$city" params={{ city: o.slug }} className="rounded-sm text-muted-foreground underline-offset-4 outline-none hover:text-foreground hover:underline focus-visible:ring-3 focus-visible:ring-ring">
                     {o.name}
                   </Link>
                 </li>

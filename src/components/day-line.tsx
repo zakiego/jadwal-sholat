@@ -37,7 +37,7 @@ export function DayLine({ place, now, eyebrow }: { place: Place; now: number; ey
           {eyebrow}
           {day.weekday}, {longDate(day.date)} · {day.hijri.text} · {zone}
         </p>
-        <h1 id="today-heading" className="max-w-3xl text-[2.5rem] leading-[1.05] font-semibold tracking-[-0.025em] text-balance sm:text-6xl">
+        <h1 id="today-heading" className="max-w-3xl text-[2.5rem] leading-[1.1] font-semibold tracking-[-0.025em] text-balance sm:text-6xl">
           {next ? (
             <>
               {next.name} di {city} {nextIsToday ? "" : "besok "}jam <span className="tabular-nums">{next.time}</span>,{" "}
@@ -73,7 +73,7 @@ export function DayLine({ place, now, eyebrow }: { place: Place; now: number; ey
                 </span>
                 <span
                   aria-hidden="true"
-                  className={cn("size-2 rounded-full border bg-background", isNext(k) ? "border-highlight bg-highlight" : passed(k) ? "border-foreground bg-foreground" : "border-foreground/40")}
+                  className={cn("size-2 rounded-full border bg-background", isNext(k) ? "border-highlight bg-highlight" : passed(k) ? "border-foreground bg-foreground" : "border-foreground/60")}
                 />
                 {!above && <span className={cn("mt-3 text-sm font-medium", isNext(k) && "text-highlight")}>{LABELS_ID[k]}</span>}
                 <span className={cn("text-sm tabular-nums", above && "mt-3", isNext(k) ? "font-medium text-highlight" : "text-muted-foreground")}>
@@ -114,7 +114,7 @@ export function DayLine({ place, now, eyebrow }: { place: Place; now: number; ey
                 aria-hidden="true"
                 className={cn(
                   "absolute left-0 size-[11px] rounded-full border",
-                  nextUp ? "border-highlight bg-highlight" : done ? "border-foreground bg-foreground" : "border-foreground/40 bg-background",
+                  nextUp ? "border-highlight bg-highlight" : done ? "border-foreground bg-foreground" : "border-foreground/60 bg-background",
                 )}
               />
               <span className={cn("w-20 text-base", nextUp ? "font-semibold text-highlight" : done && "text-muted-foreground")}>{LABELS_ID[k]}</span>

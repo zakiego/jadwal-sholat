@@ -2,7 +2,8 @@ import { createFileRoute, Link } from "@tanstack/react-router"
 import { ArrowRightIcon } from "lucide-react"
 import { DayLine, shortName } from "@/components/day-line"
 import { Page, SiteFooter, SiteHeader } from "@/components/site-shell"
-import { Button } from "@/components/ui/button"
+import { buttonVariants } from "@/components/ui/button"
+import { cn } from "@/lib/utils"
 import { useNow } from "@/hooks/use-now"
 import { pageHead } from "@/lib/seo"
 import { getHomePlace } from "@/server/fns"
@@ -32,10 +33,10 @@ function Home() {
         <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-muted-foreground">
           {source === "ip" ? <span>Kota ditebak dari koneksi internetmu.</span> : <span>Kotamu belum ketahuan, jadi ini Jakarta Pusat.</span>}
           {place.slug && (
-            <Button variant="link" className="h-auto px-0 text-foreground" render={<Link to="/$city" params={{ city: place.slug }} />} nativeButton={false}>
+            <Link to="/$city" params={{ city: place.slug }} className={cn(buttonVariants({ variant: "link" }), "h-auto px-0 text-foreground")}>
               Jadwal sebulan di {city}
               <ArrowRightIcon data-icon="inline-end" />
-            </Button>
+            </Link>
           )}
         </div>
       </main>

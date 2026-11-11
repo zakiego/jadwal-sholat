@@ -59,21 +59,29 @@ function dayLine() {
           width: 14,
           height: 14,
           borderRadius: 999,
-          backgroundColor: i === 5 ? C.accent : p < 0.8 ? C.fg : C.bg,
-          border: `2px solid ${i === 5 ? C.accent : C.fg}`,
+          backgroundColor: i === 4 ? C.accent : p < 0.8 ? C.fg : C.bg,
+          border: `2px solid ${i === 4 ? C.accent : C.fg}`,
         }),
-        h("div", { marginTop: 14, fontSize: 24, color: i === 5 ? C.accent : C.muted }, name),
+        h("div", { marginTop: 14, fontSize: 24, color: i === 4 ? C.accent : C.muted }, name),
       ),
     ),
     h("div", { position: "absolute", left: W * 0.8 - 14, top: 7, width: 28, height: 28, borderRadius: 999, backgroundColor: C.accent, border: `6px solid ${C.bg}` }),
   )
 }
 
+// Icon: the product's own picture, a dot on the day line.
+const iconSvg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect width="64" height="64" rx="14" fill="${C.fg}"/><rect x="10" y="31" width="44" height="3" rx="1.5" fill="${C.bg}" opacity="0.45"/><rect x="10" y="31" width="26" height="3" rx="1.5" fill="${C.bg}"/><circle cx="38" cy="32.5" r="8" fill="${C.accent}" stroke="${C.fg}" stroke-width="3"/></svg>`
+
 function card(title, line) {
   return h(
     "div",
     { width: 1200, height: 630, padding: 60, flexDirection: "column", justifyContent: "space-between", backgroundColor: C.bg, color: C.fg, fontFamily: "Golos" },
-    h("div", { fontSize: 30, fontWeight: 600 }, "jadwal sholat"),
+    h(
+      "div",
+      { alignItems: "center", gap: 16 },
+      { type: "img", props: { src: `data:image/svg+xml;base64,${Buffer.from(iconSvg).toString("base64")}`, width: 48, height: 48 } },
+      h("div", { fontSize: 30, fontWeight: 600 }, "jadwal sholat"),
+    ),
     h(
       "div",
       { flexDirection: "column" },
@@ -93,8 +101,6 @@ async function png(node, width, height) {
 const out = `${root}public`
 mkdirSync(`${out}/og`, { recursive: true })
 
-// Icon: the product's own picture, a dot on the day line.
-const iconSvg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect width="64" height="64" rx="14" fill="${C.fg}"/><rect x="10" y="31" width="44" height="3" rx="1.5" fill="${C.bg}" opacity="0.45"/><rect x="10" y="31" width="26" height="3" rx="1.5" fill="${C.bg}"/><circle cx="38" cy="32.5" r="8" fill="${C.accent}" stroke="${C.fg}" stroke-width="3"/></svg>`
 writeFileSync(`${out}/favicon.svg`, iconSvg)
 const render = (size) => new Resvg(iconSvg, { fitTo: { mode: "width", value: size } }).render().asPng()
 writeFileSync(`${out}/apple-touch-icon.png`, render(180))

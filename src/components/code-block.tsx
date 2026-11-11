@@ -16,14 +16,16 @@ export function CodeBlock({ code, label, className }: { code: string; label?: st
     }
   }
   return (
-    <div className={cn("relative min-w-0 rounded-lg border bg-muted/50", className)}>
-      {label && <div className="border-b px-4 py-2 text-xs text-muted-foreground">{label}</div>}
-      <pre className="overflow-x-auto p-4 pr-12 font-mono text-[13px] leading-relaxed">
+    <div className={cn("min-w-0 rounded-lg border bg-muted/50", className)}>
+      <div className="flex items-center justify-between gap-3 border-b py-1 pr-1 pl-4 text-xs text-muted-foreground">
+        <span>{label}</span>
+        <Button variant="ghost" size="icon-sm" className="shrink-0" onClick={copy} data-copied={copied ? "" : undefined} aria-label={copied ? "Copied" : "Copy code"}>
+          <CopySwapIcon />
+        </Button>
+      </div>
+      <pre className="overflow-x-auto p-4 font-mono text-[13px] leading-relaxed">
         <code>{code}</code>
       </pre>
-      <Button variant="ghost" size="icon-sm" className={cn("absolute right-2", label ? "top-10" : "top-2")} onClick={copy} data-copied={copied ? "" : undefined} aria-label={copied ? "Copied" : "Copy code"}>
-        <CopySwapIcon />
-      </Button>
     </div>
   )
 }

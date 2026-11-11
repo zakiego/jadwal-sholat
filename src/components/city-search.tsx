@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react"
 import { ChevronDownIcon, MapPinIcon } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { Command, CommandDialog, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command"
+import { Command, CommandDialog, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList, CommandShortcut } from "@/components/ui/command"
 import { Kbd } from "@/components/ui/kbd"
 import { Spinner } from "@/components/ui/spinner"
 import { cn } from "@/lib/utils"
@@ -85,7 +85,7 @@ export function CitySearch({
       </Button>
       <CommandDialog open={open} onOpenChange={setOpen} title="Cari kota" description="Ketik nama kota atau kabupaten">
         <Command shouldFilter={false}>
-          <CommandInput placeholder="Cari kota atau kabupaten…" value={query} onValueChange={setQuery} />
+          <CommandInput placeholder="Cari kota atau kabupaten…" value={query} onValueChange={setQuery} enterKeyHint="search" className="text-base sm:text-sm" />
           <CommandList>
             {state === "loading" && hits === null ? (
               <div className="flex justify-center py-6">
@@ -94,7 +94,7 @@ export function CitySearch({
             ) : state === "error" ? (
               <div className="py-6 text-center text-sm text-muted-foreground">Gagal memuat. Coba ketik lagi.</div>
             ) : (
-              <CommandEmpty>Tidak ada kota bernama “{query}”.</CommandEmpty>
+              <CommandEmpty>Tidak ada kota bernama “{query}”. Coba nama kabupatennya, misalnya Bogor.</CommandEmpty>
             )}
             {list.length > 0 && state !== "error" && (
               <CommandGroup heading={hits ? "Hasil" : "Kota besar"}>
@@ -102,7 +102,7 @@ export function CitySearch({
                   <CommandItem key={c.slug} value={c.slug} onSelect={() => pick(c.slug)}>
                     <MapPinIcon />
                     <span className="min-w-0 truncate">{c.name}</span>
-                    <span className="ml-auto shrink-0 pl-2 text-xs text-muted-foreground">{c.province}</span>
+                    <CommandShortcut className="shrink-0 pl-2 tracking-normal">{c.province}</CommandShortcut>
                   </CommandItem>
                 ))}
               </CommandGroup>

@@ -1,6 +1,6 @@
 import { useMemo } from "react"
 import { CalendarPlusIcon, DownloadIcon } from "lucide-react"
-import { Button } from "@/components/ui/button"
+import { buttonVariants } from "@/components/ui/button"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { PRAYER_KEYS } from "@/lib/prayer/engine"
 import { LABELS_ID, monthSchedule, type Place } from "@/lib/prayer/schedule"
@@ -19,14 +19,14 @@ export function MonthTable({ place, today, cityLabel }: { place: Place; today: s
           Jadwal sholat {cityLabel} {monthName}
         </h2>
         <div className="-mx-2.5 flex flex-wrap gap-1">
-          <Button variant="ghost" size="sm" render={<a href={`/api/v1/schedule/${place.slug}?month=${month}&format=csv`} download />} nativeButton={false}>
+          <a href={`/api/v1/schedule/${place.slug}?month=${month}&format=csv`} download className={buttonVariants({ variant: "ghost" })}>
             <DownloadIcon data-icon="inline-start" />
-            CSV
-          </Button>
-          <Button variant="ghost" size="sm" render={<a href={`/api/v1/calendar/${place.slug}.ics?alarm=10`} />} nativeButton={false}>
+            Unduh CSV
+          </a>
+          <a href={`/api/v1/calendar/${place.slug}.ics?alarm=10`} className={buttonVariants({ variant: "ghost" })}>
             <CalendarPlusIcon data-icon="inline-start" />
             Tambah ke kalender
-          </Button>
+          </a>
         </div>
       </div>
       <Table className="tabular-nums">

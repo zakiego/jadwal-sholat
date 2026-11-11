@@ -1,6 +1,6 @@
 import { HeadContent, Link, Scripts, createRootRoute } from "@tanstack/react-router"
 import { Page, SiteHeader } from "@/components/site-shell"
-import { Button } from "@/components/ui/button"
+import { buttonVariants } from "@/components/ui/button"
 import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyTitle } from "@/components/ui/empty"
 import appCss from "../styles.css?url"
 
@@ -8,14 +8,14 @@ export const Route = createRootRoute({
   head: () => ({
     meta: [
       { charSet: "utf-8" },
-      { title: "Jadwal Sholat" },
-      { name: "viewport", content: "width=device-width, initial-scale=1, viewport-fit=cover" },
-      { name: "theme-color", content: "#fbfaf8", media: "(prefers-color-scheme: light)" },
-      { name: "theme-color", content: "#0e0e0e", media: "(prefers-color-scheme: dark)" },
+      { title: "Halaman tidak ditemukan | Jadwal Sholat" },
+      { name: "viewport", content: "width=device-width, initial-scale=1" },
+      { name: "theme-color", content: "#fbfaf8" },
     ],
     links: [
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
+      { rel: "stylesheet", href: "https://fonts.googleapis.com/css2?family=Golos+Text:wght@400..800&family=JetBrains+Mono:wght@400;500&display=swap" },
       { rel: "stylesheet", href: appCss },
       { rel: "icon", href: "/favicon.svg", type: "image/svg+xml" },
       { rel: "icon", href: "/favicon.ico", sizes: "32x32" },
@@ -34,13 +34,15 @@ function NotFound() {
       <main className="flex flex-1 items-center justify-center">
         <Empty>
           <EmptyHeader>
-            <EmptyTitle>Kota ini belum ada di daftar kami.</EmptyTitle>
+            <EmptyTitle>
+              <h1>Kota ini belum ada di daftar kami.</h1>
+            </EmptyTitle>
             <EmptyDescription>Cari lewat tombol kota di atas, atau buka jadwal untuk lokasimu sekarang.</EmptyDescription>
           </EmptyHeader>
           <EmptyContent>
-            <Button render={<Link to="/" />} nativeButton={false}>
-              Jadwal di lokasiku
-            </Button>
+            <Link to="/" className={buttonVariants()}>
+              Buka jadwal di lokasimu
+            </Link>
           </EmptyContent>
         </Empty>
       </main>
