@@ -1,5 +1,6 @@
 import { createServerEntry, createStartHandler, defaultStreamHandler } from "@tanstack/react-start/server"
-import { getCity } from "@/lib/cities"
+import { CITIES, getCity } from "@/lib/cities"
+import { SITE_URL } from "@/lib/site"
 import { placeFromCity } from "@/lib/prayer/schedule"
 import { CORS_HEADERS, errorResponse, handleApi } from "@/server/api"
 import { handleMcp } from "@/server/mcp"
@@ -19,6 +20,17 @@ async function route(req: Request): Promise<Response> {
   if (path === "/openapi.json") {
     return new Response(JSON.stringify(openapi, null, 2), {
       headers: { "content-type": "application/json; charset=utf-8", "cache-control": "public, max-age=3600", ...CORS_HEADERS },
+    })
+  }
+  if (path === "/robots.txt") {
+    return new Response(`User-agent: *\nAllow: /\nDisallow: /api/\nDisallow: /mcp\n\nSitemap: ${SITE_URL}/sitemap.xml\n`, {
+      headers: { "content-type": "text/plain; charset=utf-8", "cache-control": "public, max-age=86400" },
+    })
+  }
+  if (path === "/sitemap.xml") {
+    const urls = ["/", "/docs", ...CITIES.map((c) => `/${c.slug}`)].map((u) => `  <url><loc>${SITE_URL}${u}</loc></url>`).join("\n")
+    return new Response(`<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls}\n</urlset>\n`, {
+      headers: { "content-type": "application/xml; charset=utf-8", "cache-control": "public, max-age=86400" },
     })
   }
   if (path === "/llms.txt") return new Response(llmsTxt, { headers: { "content-type": "text/plain; charset=utf-8", "cache-control": "public, max-age=3600" } })

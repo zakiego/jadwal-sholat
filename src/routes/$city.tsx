@@ -15,7 +15,7 @@ export const Route = createFileRoute("/$city")({
   },
   staleTime: 60_000,
   head: ({ loaderData }) => {
-    if (!loaderData) return {}
+    if (!loaderData) return { meta: [{ title: "Kota tidak ditemukan | Jadwal Sholat" }, { name: "robots", content: "noindex" }] }
     const { city } = loaderData
     const short = shortName(loaderData.place)
     return pageHead({

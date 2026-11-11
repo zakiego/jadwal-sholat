@@ -8,6 +8,7 @@ export const Route = createRootRoute({
   head: () => ({
     meta: [
       { charSet: "utf-8" },
+      { title: "Jadwal Sholat" },
       { name: "viewport", content: "width=device-width, initial-scale=1, viewport-fit=cover" },
       { name: "theme-color", content: "#fbfaf8", media: "(prefers-color-scheme: light)" },
       { name: "theme-color", content: "#0e0e0e", media: "(prefers-color-scheme: dark)" },

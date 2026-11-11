@@ -8,10 +8,12 @@
 	"scripts": {
 		"dev": "vite dev --port 3000",
 		"generate-routes": "vite build",
-		"build": "vite build",
+		"build": "node scripts/og.mjs && vite build",
 		"preview": "pnpm run build && vite preview",
 		"deploy": "pnpm run build && wrangler deploy",
-		"cf-typegen": "wrangler types"
+		"cf-typegen": "wrangler types",
+		"og": "node scripts/og.mjs",
+		"validate": "tsx scripts/validate.ts"
 	},
 	"dependencies": {
 		"@base-ui/react": "^1.9.0",
@@ -38,10 +40,12 @@
 	},
 	"devDependencies": {
 		"@cloudflare/vite-plugin": "^1.26.0",
+		"@resvg/resvg-js": "^2.6.2",
 		"@types/node": "^22.10.2",
 		"@types/react": "^19.2.0",
 		"@types/react-dom": "^19.2.0",
 		"@vitejs/plugin-react": "^6.0.1",
+		"satori": "^0.63.2",
 		"typescript": "^6.0.2",
 		"vite": "^8.0.0",
 		"wrangler": "^4.159.0"
