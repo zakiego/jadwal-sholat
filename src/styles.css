@@ -1,0 +1,107 @@
+@import url("https://fonts.googleapis.com/css2?family=Instrument+Sans:ital,wght@0,400..700;1,400..700&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500;600&display=swap");
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --font-sans: "Instrument Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-serif: "Instrument Serif", ui-serif, Georgia, serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+  --font-heading: var(--font-sans);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --color-foreground: var(--foreground);
+  --color-background: var(--background);
+  --color-highlight: var(--highlight);
+  --color-highlight-foreground: var(--highlight-foreground);
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
+}
+
+:root {
+  --radius: 0.625rem;
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --background: oklch(0.985 0.002 85);
+  --foreground: oklch(0.17 0.005 85);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.17 0.005 85);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.17 0.005 85);
+  --primary: oklch(0.2 0.005 85);
+  --primary-foreground: oklch(0.985 0 0);
+  --secondary: oklch(0.955 0.004 85);
+  --secondary-foreground: oklch(0.2 0.005 85);
+  --muted: oklch(0.955 0.004 85);
+  --muted-foreground: oklch(0.5 0.008 85);
+  --accent: oklch(0.955 0.004 85);
+  --accent-foreground: oklch(0.2 0.005 85);
+  --destructive: oklch(0.577 0.245 27.325);
+  --border: oklch(0.91 0.005 85);
+  --input: oklch(0.91 0.005 85);
+  --ring: oklch(0.6 0.01 85);
+  /* The one accent: amber, for "next prayer" and nothing else. */
+  --highlight: oklch(0.53 0.14 60);
+  --highlight-foreground: oklch(0.2 0.03 65);
+}
+
+.dark {
+  --background: oklch(0.155 0 0);
+  --foreground: oklch(0.96 0 0);
+  --card: oklch(0.195 0 0);
+  --card-foreground: oklch(0.96 0 0);
+  --popover: oklch(0.205 0 0);
+  --popover-foreground: oklch(0.96 0 0);
+  --primary: oklch(0.96 0 0);
+  --primary-foreground: oklch(0.17 0 0);
+  --secondary: oklch(0.25 0 0);
+  --secondary-foreground: oklch(0.96 0 0);
+  --muted: oklch(0.25 0 0);
+  --muted-foreground: oklch(0.7 0 0);
+  --accent: oklch(0.25 0 0);
+  --accent-foreground: oklch(0.96 0 0);
+  --destructive: oklch(0.704 0.191 22.216);
+  --border: oklch(1 0 0 / 11%);
+  --input: oklch(1 0 0 / 15%);
+  --ring: oklch(0.55 0 0);
+  --highlight: oklch(0.8 0.14 75);
+  --highlight-foreground: oklch(0.2 0.03 65);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  html {
+    @apply bg-background font-sans;
+    -webkit-tap-highlight-color: transparent;
+    -webkit-text-size-adjust: 100%;
+    color-scheme: light;
+  }
+  html.dark {
+    color-scheme: dark;
+  }
+  body {
+    @apply bg-background text-foreground antialiased;
+  }
+}
