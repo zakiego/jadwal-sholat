@@ -41,10 +41,10 @@ export function DayLine({ place, now, eyebrow }: { place: Place; now: number; ey
           {next ? (
             <>
               {next.name} di {city} {nextIsToday ? "" : "besok "}jam <span className="tabular-nums">{next.time}</span>,{" "}
-              <span className="text-highlight">{untilText(next.in_seconds)} lagi.</span>
+              <span className="text-highlight">{untilText(next.in_seconds)} lagi</span>
             </>
           ) : (
-            <>Jadwal sholat {city} hari ini.</>
+            <>Jadwal sholat {city} hari ini</>
           )}
         </h1>
       </div>
