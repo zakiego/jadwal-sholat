@@ -1,6 +1,6 @@
 import { createServerEntry, createStartHandler, defaultStreamHandler } from "@tanstack/react-start/server"
 import { CITIES, getCity } from "@/lib/cities"
-import { SITE_URL } from "@/lib/site"
+import { SITE_HOST, SITE_URL } from "@/lib/site"
 import { placeFromCity } from "@/lib/prayer/schedule"
 import { CORS_HEADERS, errorResponse, handleApi } from "@/server/api"
 import { handleMcp } from "@/server/mcp"
@@ -13,6 +13,13 @@ const start = createStartHandler(defaultStreamHandler)
 async function route(req: Request): Promise<Response> {
   const url = new URL(req.url)
   const path = url.pathname
+
+  // Cloudflare's "Always Use HTTPS" is off for this host so plain `curl sholat.zakiego.com/<city>`
+  // (which defaults to http) reaches the text view. Everything else still gets upgraded here.
+  if (url.protocol === "http:" && url.hostname === SITE_HOST && !(req.method === "GET" && wantsText(req))) {
+    url.protocol = "https:"
+    return Response.redirect(url.toString(), 301)
+  }
 
   if (path === "/mcp" || path === "/mcp/") return handleMcp(req)
   const api = handleApi(req, url)
