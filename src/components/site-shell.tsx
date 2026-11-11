@@ -11,7 +11,7 @@ export function SiteHeader({ cityLabel }: { cityLabel?: string }) {
   return (
     <header className="flex items-center justify-between gap-3">
       <Link to="/" className="shrink-0 rounded-sm text-sm font-semibold tracking-tight outline-none focus-visible:ring-3 focus-visible:ring-ring">
-        jadwal sholat
+        Jadwal Sholat
       </Link>
       <div className="flex min-w-0 items-center gap-1">
         <Link to="/docs" className={cn(buttonVariants({ variant: "ghost", size: "lg" }), "hidden sm:inline-flex")}>
