@@ -55,6 +55,27 @@ const MCP_JSON = `{
   }
 }`
 
+const AGENT_PROMPT = `Set up Jadwal Sholat (${SITE_URL}) so you can answer prayer time questions for me from now on.
+
+What it offers:
+- MCP server: ${SITE_URL}/mcp (Streamable HTTP, stateless, no auth)
+- JSON API: ${SITE_URL}/api/v1, spec at ${SITE_URL}/openapi.json
+- Overview for agents: ${SITE_URL}/llms.txt
+- iCal feeds: ${SITE_URL}/api/v1/calendar/{city}.ics
+- Plain text: curl ${SITE_URL}/{city}
+
+Read llms.txt first. Then figure out what kind of agent you are and what your environment supports, and pick the best way to integrate:
+1. If you support remote MCP servers, add it as an MCP server named "jadwal-sholat" using your own config format and scope (user-level, so it works in every project).
+2. If you don't support MCP but support skills, rules or custom instructions, write one that tells you to call the JSON API or curl the text view.
+3. If neither works, tell me what you'd do instead and why.
+
+Don't overwrite existing config. Merge into it and back up any file you change.
+
+When it's done:
+- Ask me for my city (or coordinates if I'm outside Indonesia) and save it as my default if your system has a place for that.
+- Test it by fetching today's prayer times for that city and showing them to me.
+- Tell me in 2 or 3 lines what you set up, where the config lives, and if I need to restart anything.`
+
 function Section({ id, title, children }: { id: string; title: string; children: React.ReactNode }) {
   return (
     <section id={id} className="flex scroll-mt-8 flex-col gap-4" aria-labelledby={`${id}-heading`}>
@@ -77,6 +98,13 @@ function Docs() {
             Every Indonesian city and regency on the Kemenag RI method, plus any coordinates in the world. No key, no signup, CORS open.
           </p>
         </div>
+
+        <Section id="agent" title="Let your agent set it up">
+          <p className="max-w-2xl text-muted-foreground">
+            Paste this into Claude Code, Cursor, Codex or any other agent. It works out whether to add the MCP server, write a skill or fall back to the API, then tests it on your city.
+          </p>
+          <CodeBlock code={AGENT_PROMPT} label="Prompt for your agent" wrap />
+        </Section>
 
         <Section id="quickstart" title="Quick start">
           <CodeBlock code={`curl ${SITE_HOST}/banjarbaru`} label="Terminal: today, as text" />

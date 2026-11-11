@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 
 /** A code sample with a copy button. The icon flips to a check, no toast. */
-export function CodeBlock({ code, label, className }: { code: string; label?: string; className?: string }) {
+export function CodeBlock({ code, label, wrap, className }: { code: string; label?: string; wrap?: boolean; className?: string }) {
   const [copied, setCopied] = useState(false)
   const copy = async () => {
     try {
@@ -23,7 +23,7 @@ export function CodeBlock({ code, label, className }: { code: string; label?: st
           <CopySwapIcon />
         </Button>
       </div>
-      <pre className="overflow-x-auto p-4 font-mono text-[13px] leading-relaxed">
+      <pre className={cn("p-4 font-mono text-[13px] leading-relaxed", wrap ? "whitespace-pre-wrap break-words" : "overflow-x-auto")}>
         <code>{code}</code>
       </pre>
     </div>
