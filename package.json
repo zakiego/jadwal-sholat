@@ -1,6 +1,21 @@
 {
 	"name": "jadwal-sholat",
+	"version": "1.0.0",
+	"description": "Free prayer times for every Indonesian city (Kemenag method): website, JSON API, MCP server, iCal feeds and curl.",
 	"private": true,
+	"license": "MIT",
+	"author": "Zakiego (https://github.com/zakiego)",
+	"homepage": "https://sholat.zakiego.com",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/zakiego/jadwal-sholat.git"
+	},
+	"bugs": "https://github.com/zakiego/jadwal-sholat/issues",
+	"keywords": ["prayer-times", "jadwal-sholat", "indonesia", "kemenag", "mcp", "cloudflare-workers"],
+	"engines": {
+		"node": ">=22"
+	},
+	"packageManager": "pnpm@10.34.5",
 	"type": "module",
 	"imports": {
 		"#/*": "./src/*"
