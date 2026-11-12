@@ -1,36 +1,103 @@
 # Jadwal Sholat
 
-Prayer times for every Indonesian city and regency (514 kabupaten/kota, Kemenag RI method) and any coordinates worldwide. Live at https://sholat.zakiego.com.
+Free prayer times for every Indonesian city and regency (514 kabupaten/kota) and any coordinates worldwide. You get a website, a JSON API, an MCP server, iCal feeds, and a text view you can `curl`. No API key and no sign-up.
 
-- Website: today's times as a day line with the next prayer, plus a monthly table per city
-- JSON API under `/api/v1`, OpenAPI spec at `/openapi.json`
-- MCP server at `/mcp` (stateless Streamable HTTP, no auth)
-- iCal feeds at `/api/v1/calendar/{city}.ics`
-- `curl sholat.zakiego.com/banjarbaru` prints today's times as text
+Live at **https://sholat.zakiego.com**. Developer docs are at [/docs](https://sholat.zakiego.com/docs).
 
-Times are computed in the Worker (`src/lib/prayer/engine.ts`), no upstream API. `pnpm validate` compares them with the official Kemenag schedule from api.myquran.com. City coordinates come from [cahyadsn/wilayah](https://github.com/cahyadsn/wilayah) (MIT), rebuilt with `scripts/build-cities.py`.
+```
+$ curl sholat.zakiego.com/banjarbaru
+```
 
-## Develop
+Times are computed with the Kemenag RI method (Fajr 20°, Isha 18°, 2 minutes ihtiyat). They match the official Kemenag schedule to within a minute. Eight other methods are available (MWL, ISNA, Egypt, Makkah, Karachi, JAKIM, MUIS, Diyanet).
+
+## Use it
+
+### JSON API
 
 ```bash
+curl https://sholat.zakiego.com/api/v1/schedule/banjarbaru                 # today
+curl "https://sholat.zakiego.com/api/v1/schedule/banjarbaru?month=2026-11" # a month (add &format=csv)
+curl "https://sholat.zakiego.com/api/v1/schedule?lat=-6.2&lng=106.8"       # any coordinates
+curl https://sholat.zakiego.com/api/v1/next/banjarbaru                     # next prayer
+curl "https://sholat.zakiego.com/api/v1/cities?q=bandung"                  # find a city slug
+```
+
+The full spec is at [`/openapi.json`](https://sholat.zakiego.com/openapi.json) (OpenAPI 3.1). There's also an [`llms.txt`](https://sholat.zakiego.com/llms.txt).
+
+### MCP server
+
+`https://sholat.zakiego.com/mcp` speaks stateless Streamable HTTP with no auth. It has five tools: `search_cities`, `get_prayer_times`, `get_next_prayer`, `get_monthly_schedule` and `list_methods`.
+
+```bash
+claude mcp add --transport http jadwal-sholat https://sholat.zakiego.com/mcp
+```
+
+For Cursor and other clients that take a JSON config:
+
+```json
+{
+  "mcpServers": {
+    "jadwal-sholat": { "type": "http", "url": "https://sholat.zakiego.com/mcp" }
+  }
+}
+```
+
+### Calendar
+
+Subscribe to `https://sholat.zakiego.com/api/v1/calendar/banjarbaru.ics?alarm=10` in Google Calendar, Apple Calendar or Outlook. That gets you every prayer with a reminder 10 minutes before.
+
+## Run it locally
+
+You need Node 22+ and pnpm.
+
+```bash
+git clone https://github.com/zakiego/jadwal-sholat.git
+cd jadwal-sholat
 pnpm i
-pnpm dev                # http://localhost:3000
-pnpm og                 # render OG images, icons and manifest into public/
-pnpm build && pnpm deploy
+pnpm dev               # http://localhost:3000
 ```
 
-On a city page in dev, `?data=worst|after-isha|polar` swaps in worst-case data.
+No environment variables, database or API keys are needed. Everything runs in one Cloudflare Worker, and the times are computed locally.
 
-Deploys to the Zakiego Lab Cloudflare account:
+Useful commands:
 
 ```bash
-XDG_CONFIG_HOME="$HOME/.wrangler-accounts/personal" pnpm deploy
+pnpm exec tsc          # typecheck
+pnpm build             # render OG images into public/, then build
+pnpm og                # just the OG images, icons and manifest
+pnpm dlx tsx scripts/validate.ts   # compare our times with the official Kemenag schedule
 ```
 
-## Layout
+In dev, add `?data=worst`, `?data=after-isha` or `?data=polar` to a city page to see it with worst-case data.
 
-- `src/server.ts`: Worker entry. Routes `/api`, `/mcp`, robots, sitemap, `llms.txt` and the curl text view, then hands the rest to TanStack Start.
-- `src/server/`: API handlers, MCP server, OpenAPI spec, iCal, text view.
-- `src/lib/prayer/`: the calculation engine, methods and schedule helpers.
-- `src/routes/`: `/`, `/$city`, `/docs`.
-- `DESIGN.md`: design contract and decisions.
+## Deploy your own
+
+1. Change the custom domain in `wrangler.jsonc`.
+2. Change `SITE_URL` and `SITE_HOST` in `src/lib/site.ts`.
+3. Log in with `pnpm exec wrangler login`, then run `pnpm deploy`.
+
+It fits in Cloudflare's free Workers plan. There are no bindings to set up.
+
+## How it works
+
+- `src/server.ts` is the Worker entry. It routes `/api`, `/mcp`, `robots.txt`, `sitemap.xml`, `llms.txt` and the curl text view. Everything else goes to TanStack Start.
+- `src/lib/prayer/` is the calculation engine (sun position, methods, schedules). It has no runtime dependencies on outside APIs.
+- `src/server/` holds the API handlers, MCP server, OpenAPI spec, iCal feed and text view.
+- `src/routes/` holds the pages: `/`, `/$city` and `/docs`. The home page guesses your city from your IP on the server, so it opens without a loading state or a location prompt.
+- `src/data/cities.json` holds coordinates, elevation and time zone for each kabupaten/kota. It's generated by `scripts/build-cities.py`.
+
+Built with TanStack Start, React 19, Tailwind CSS v4, shadcn/ui and Cloudflare Workers.
+
+## Contributing
+
+Issues and PRs are welcome, especially bug reports where a time doesn't match the official Kemenag schedule. See [CONTRIBUTING.md](CONTRIBUTING.md). Coding agents should also read [AGENTS.md](AGENTS.md), and design changes follow [DESIGN.md](DESIGN.md).
+
+## Credits
+
+- City codes and coordinates: [cahyadsn/wilayah](https://github.com/cahyadsn/wilayah) (MIT)
+- Reference schedule for validation: [api.myquran.com](https://api.myquran.com)
+- Fonts: [Golos Text](https://fonts.google.com/specimen/Golos+Text) and [JetBrains Mono](https://www.jetbrains.com/lp/mono/) (SIL Open Font License)
+
+## License
+
+[MIT](LICENSE)
