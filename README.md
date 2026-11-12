@@ -65,7 +65,7 @@ Useful commands:
 pnpm exec tsc          # typecheck
 pnpm build             # render OG images into public/, then build
 pnpm og                # just the OG images, icons and manifest
-pnpm dlx tsx scripts/validate.ts   # compare our times with the official Kemenag schedule
+pnpm validate          # compare our times with the official Kemenag schedule
 ```
 
 In dev, add `?data=worst`, `?data=after-isha` or `?data=polar` to a city page to see it with worst-case data.
@@ -73,7 +73,7 @@ In dev, add `?data=worst`, `?data=after-isha` or `?data=polar` to a city page to
 ## Deploy your own
 
 1. Change the custom domain in `wrangler.jsonc`.
-2. Change `SITE_URL` and `SITE_HOST` in `src/lib/site.ts`.
+2. Change `SITE_URL`, `SITE_HOST` and `REPO_URL` in `src/lib/site.ts`.
 3. Log in with `pnpm exec wrangler login`, then run `pnpm deploy`.
 
 It fits in Cloudflare's free Workers plan. There are no bindings to set up.
@@ -90,13 +90,16 @@ Built with TanStack Start, React 19, Tailwind CSS v4, shadcn/ui and Cloudflare W
 
 ## Contributing
 
-Issues and PRs are welcome, especially bug reports where a time doesn't match the official Kemenag schedule. See [CONTRIBUTING.md](CONTRIBUTING.md). Coding agents should also read [AGENTS.md](AGENTS.md), and design changes follow [DESIGN.md](DESIGN.md).
+Issues and PRs are welcome, especially bug reports where a time doesn't match the official Kemenag schedule. See [CONTRIBUTING.md](CONTRIBUTING.md). Coding agents should also read [AGENTS.md](AGENTS.md), and design changes follow [DESIGN.md](DESIGN.md). To report a vulnerability, see [SECURITY.md](SECURITY.md).
 
 ## Credits
 
 - City codes and coordinates: [cahyadsn/wilayah](https://github.com/cahyadsn/wilayah) (MIT)
 - Reference schedule for validation: [api.myquran.com](https://api.myquran.com)
 - Fonts: [Golos Text](https://fonts.google.com/specimen/Golos+Text) and [JetBrains Mono](https://www.jetbrains.com/lp/mono/) (SIL Open Font License)
+- UI components: [shadcn/ui](https://ui.shadcn.com) (MIT)
+
+The licence texts are in [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
 
 ## License
 
