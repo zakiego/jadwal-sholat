@@ -7,6 +7,8 @@ import satori from "satori"
 const root = new URL("..", import.meta.url).pathname
 const css = readFileSync(`${root}src/styles.css`, "utf8")
 const cities = JSON.parse(readFileSync(`${root}src/data/cities.json`, "utf8"))
+// Read the host from src/lib/site.ts so a fork's cards show its own domain.
+const siteHost = readFileSync(`${root}src/lib/site.ts`, "utf8").match(/SITE_HOST = "([^"]+)"/)[1]
 const fonts = [
   { name: "Golos", data: readFileSync(`${root}scripts/fonts/golos-400.ttf`), weight: 400, style: "normal" },
   { name: "Golos", data: readFileSync(`${root}scripts/fonts/golos-600.ttf`), weight: 600, style: "normal" },
@@ -89,7 +91,7 @@ function card(title, line) {
       h("div", { marginTop: 18, fontSize: 34, color: C.muted }, line),
     ),
     dayLine(),
-    h("div", { fontSize: 28, color: C.muted }, "sholat.zakiego.com"),
+    h("div", { fontSize: 28, color: C.muted }, siteHost),
   )
 }
 
