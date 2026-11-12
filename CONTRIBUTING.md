@@ -17,11 +17,11 @@ Open an issue with:
 2. Run `pnpm i`, then `pnpm dev`.
 3. Make your change.
 4. Check it with `pnpm exec tsc` (it has to pass) and `pnpm build`.
-5. If you touched `src/lib/prayer/`, run `pnpm dlx tsx scripts/validate.ts`. Every prayer should stay within 1 minute of Kemenag.
+5. If you touched `src/lib/prayer/`, run `pnpm validate`. Every prayer should stay within 1 minute of Kemenag.
 6. For UI changes, test a city page with `?data=worst`, `?data=after-isha` and `?data=polar`, and at 320px wide. Add before and after screenshots to the PR.
 7. Open a PR against `main`.
 
-There's no test suite or linter yet, so the typecheck and build are the bar. Adding tests for the prayer engine would be a welcome first PR.
+There's no test suite or linter yet, so the typecheck and build are the bar. CI runs both on every PR. Adding tests for the prayer engine would be a welcome first PR.
 
 ## Conventions
 

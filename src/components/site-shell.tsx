@@ -3,7 +3,7 @@ import { CitySearch } from "@/components/city-search"
 import { CopyCommand } from "@/components/copy-command"
 import { buttonVariants } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
-import { SITE_HOST } from "@/lib/site"
+import { REPO_URL, SITE_HOST } from "@/lib/site"
 import { cn } from "@/lib/utils"
 
 export function SiteHeader({ cityLabel }: { cityLabel?: string }) {
@@ -45,6 +45,9 @@ export function SiteFooter({ slug }: { slug?: string | null }) {
               Kalender (.ics)
             </a>
           )}
+          <a href={REPO_URL} target="_blank" rel="noreferrer" className={buttonVariants({ variant: "ghost" })}>
+            GitHub
+          </a>
         </nav>
       </div>
       <p className="text-xs text-muted-foreground">

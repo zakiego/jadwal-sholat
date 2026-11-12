@@ -1,0 +1,38 @@
+name: Wrong prayer time
+description: A time doesn't match the official Kemenag schedule
+labels: ["bug"]
+body:
+  - type: input
+    id: place
+    attributes:
+      label: City slug or coordinates
+      placeholder: banjarbaru, or -3.44,114.83
+    validations:
+      required: true
+  - type: input
+    id: date
+    attributes:
+      label: Date
+      placeholder: "2026-11-12"
+    validations:
+      required: true
+  - type: textarea
+    id: times
+    attributes:
+      label: Which prayer is off
+      description: Give our time and the official Kemenag time for each prayer that differs.
+      placeholder: "Subuh: ours 04:38, Kemenag 04:40"
+    validations:
+      required: true
+  - type: input
+    id: source
+    attributes:
+      label: Where the official time came from
+      description: A link to bimasislam.kemenag.go.id, or attach a screenshot below.
+    validations:
+      required: true
+  - type: textarea
+    id: notes
+    attributes:
+      label: Anything else
+      description: The method or Asr setting you used, screenshots, and so on.
