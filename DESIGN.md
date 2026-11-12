@@ -15,4 +15,5 @@
 ## Decisions
 
 - 2026-11-11, hero (today's times + next prayer): three variants. Day line (time as space: the day is one line and you're a dot on it, a vertical rail on phones), Poster (type scale: one huge serif word plus a countdown), Board (density: a dark departure board of eight equal tiles). Kept Day line. No reason given.
+- 2026-11-12, footer: added a plain "GitHub" text link as the last item in the developer nav. No icon and no star count, so it reads like the other three links and wraps with them on narrow screens.
 - 2026-11-11, type: dropped Instrument Sans (on the overused list) for Golos Text. Tried Schibsted Grotesk first, but its tabular colon renders as "19 : 28".
