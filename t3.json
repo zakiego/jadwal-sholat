@@ -1,0 +1,12 @@
+{
+  "$schema": "https://t3.codes/schema/t3.json",
+  "worktreeSubmodules": "none",
+  "scripts": [
+    { "name": "Setup Worktree", "command": "bash scripts/setup-worktree.sh", "icon": "configure", "runOnWorktreeCreate": true, "async": false },
+    { "name": "Clean Worktree", "command": "bash scripts/clean-worktree.sh", "icon": "configure", "runOnSettle": true },
+    { "name": "Dev", "command": "pnpm dev", "icon": "play", "stopOnSettle": true, "previewUrl": "http://localhost:3000" },
+    { "name": "Typecheck", "command": "pnpm exec tsc", "icon": "lint" },
+    { "name": "Generate Assets", "command": "pnpm og", "icon": "build" },
+    { "name": "Build", "command": "pnpm build", "icon": "build" }
+  ]
+}
