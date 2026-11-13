@@ -5,3 +5,4 @@ allowBuilds:
   workerd: true
 packages:
   - .
+ignoreWorkspaceRootCheck: true
