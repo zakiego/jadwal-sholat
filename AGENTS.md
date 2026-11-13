@@ -30,6 +30,9 @@ pnpm validate         # compare our times with the official Kemenag schedule
 - `public/` is gitignored because `scripts/og.mjs` generates all of it. Run `pnpm og` (or `pnpm build`) after changing colors in `src/styles.css`, city data, or the OG card layout.
 - `pnpm validate` calls api.myquran.com with a 1.5 s delay per request, so it's slow on purpose. The arguments are optional: `<dates comma-separated> <city slugs comma-separated>`.
 - No environment variables or secrets are needed. `wrangler.jsonc` has no bindings.
+- `bash scripts/setup-worktree.sh` is what T3 Code runs when it creates a worktree: it installs from the lockfile. It doesn't run `pnpm og`, so a new worktree has no `public/` until you run it or build.
+- `bash scripts/clean-worktree.sh` is what T3 Code runs when a thread settles: it deletes `node_modules` and build output in that worktree, and does nothing in the main checkout.
+- The T3 actions are in `t3.json`. T3 runs a project's saved actions, not the file, so after a change to it, import them again in Settings > Projects > Actions.
 
 ## Testing
 
