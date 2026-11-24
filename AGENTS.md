@@ -6,13 +6,13 @@ Jadwal Sholat is a prayer-times site for every Indonesian city and regency (514 
 
 - The website: `/` guesses the visitor's city from their IP, and `/$city` shows that city's day and month. Both render on the server.
 - A JSON API under `/api/v1`, with the OpenAPI spec at `/openapi.json` and `llms.txt` at `/llms.txt`.
-- An MCP server at `/mcp`. It's stateless Streamable HTTP with no auth.
+- An MCP server at `/mcp`. It's stateless Streamable HTTP with no auth, and it speaks both protocol eras: legacy clients open with `initialize`, spec 2026-07-28 clients send the version in each request's `_meta` (`isLegacyRequest` in `src/server/mcp.ts` picks the path).
 - iCal feeds at `/api/v1/calendar/{city}.ics`.
 - A plain-text view for `curl <host>/<city>`, in the style of wttr.in.
 
 Prayer times are computed in the Worker. There's no upstream API at runtime.
 
-Stack: TanStack Start (React 19, TanStack Router), Vite 8 with `@cloudflare/vite-plugin`, Tailwind CSS v4, shadcn/ui (`base-nova` style on `@base-ui/react`), zod, and `@modelcontextprotocol/sdk`. The package manager is pnpm.
+Stack: TanStack Start (React 19, TanStack Router), Vite 8 with `@cloudflare/vite-plugin`, Tailwind CSS v4, shadcn/ui (`base-nova` style on `@base-ui/react`), zod, and `@modelcontextprotocol/server` (SDK v2). The package manager is pnpm.
 
 ## Setup and commands
 

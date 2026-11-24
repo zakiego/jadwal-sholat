@@ -1,6 +1,5 @@
-import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
-import { WebStandardStreamableHTTPServerTransport } from "@modelcontextprotocol/sdk/server/webStandardStreamableHttp.js"
-import { CfWorkerJsonSchemaValidator } from "@modelcontextprotocol/sdk/validation/cfworker"
+import { createMcpHandler, isLegacyRequest, McpServer, WebStandardStreamableHTTPServerTransport } from "@modelcontextprotocol/server"
+import { CfWorkerJsonSchemaValidator } from "@modelcontextprotocol/server/validators/cf-worker"
 import { z } from "zod"
 import { searchCities } from "@/lib/cities"
 import { METHOD_IDS, METHODS } from "@/lib/prayer/methods"
@@ -9,7 +8,7 @@ import { SITE_URL } from "@/lib/site"
 import { cityJson, CORS_HEADERS, dayJson } from "./api"
 import { ApiError, checkDate, checkMonth, geoFromRequest, placeFromCitySlug, placeFromCoords, placeFromGeo } from "./resolve"
 
-const where = {
+const where = z.object({
   city: z
     .string()
     .optional()
@@ -19,7 +18,7 @@ const where = {
   timezone: z.string().optional().describe("IANA time zone like Asia/Jakarta. Guessed from the coordinates when omitted."),
   method: z.enum(METHOD_IDS as [string, ...string[]]).optional().describe("Calculation method. Defaults to kemenag (Indonesia)."),
   asr: z.enum(["standard", "hanafi"]).optional().describe("Asr shadow rule. Defaults to standard (Shafi'i, Maliki, Hanbali)."),
-}
+})
 
 type Where = { city?: string; latitude?: number; longitude?: number; timezone?: string; method?: string; asr?: string }
 
@@ -51,7 +50,7 @@ function buildServer(req: Request) {
     {
       title: "Search cities",
       description: "Find Indonesian regencies and cities (514 kabupaten/kota) by name. Returns slugs to use in the other tools.",
-      inputSchema: { query: z.string().describe('Place name, like "banjarbaru" or "kab bandung"'), limit: z.number().int().min(1).max(50).optional() },
+      inputSchema: z.object({ query: z.string().describe('Place name, like "banjarbaru" or "kab bandung"'), limit: z.number().int().min(1).max(50).optional() }),
       annotations: { readOnlyHint: true, openWorldHint: false },
     },
     async ({ query, limit }) => ok(searchCities(query, { limit: limit ?? 8 }).map(cityJson)),
@@ -63,7 +62,7 @@ function buildServer(req: Request) {
       title: "Get prayer times",
       description:
         "Prayer times for one day: imsak, fajr (Subuh), sunrise (Terbit), dhuha, dhuhr (Dzuhur), asr (Ashar), maghrib and isha (Isya), plus the Hijri date. Defaults to today in the place's time zone. Without city or coordinates it uses the caller's approximate IP location.",
-      inputSchema: { ...where, date: z.string().optional().describe("Local date, YYYY-MM-DD. Defaults to today.") },
+      inputSchema: where.extend({ date: z.string().optional().describe("Local date, YYYY-MM-DD. Defaults to today.") }),
       annotations: { readOnlyHint: true, openWorldHint: false },
     },
     async (args) => {
@@ -102,7 +101,7 @@ function buildServer(req: Request) {
     {
       title: "Get monthly schedule",
       description: "Prayer times for every day of a month. Good for printing a schedule or planning Ramadan.",
-      inputSchema: { ...where, month: z.string().describe("YYYY-MM") },
+      inputSchema: where.extend({ month: z.string().describe("YYYY-MM") }),
       annotations: { readOnlyHint: true, openWorldHint: false },
     },
     async (args) => {
@@ -134,16 +133,31 @@ function buildServer(req: Request) {
   return server
 }
 
-/** Stateless Streamable HTTP: a fresh server per request, JSON responses, no sessions. */
+/** 2025-era clients (initialize handshake): stateless Streamable HTTP, a fresh server per request, JSON responses. */
+async function serveLegacy(req: Request) {
+  const transport = new WebStandardStreamableHTTPServerTransport({ sessionIdGenerator: undefined, enableJsonResponse: true })
+  const server = buildServer(req)
+  await server.connect(transport)
+  return transport.handleRequest(req)
+}
+
+/** Spec 2026-07-28 clients: no handshake, the version rides in each request's _meta. Same tools. */
+async function serveModern(req: Request) {
+  const handler = createMcpHandler(() => buildServer(req), { legacy: "reject" })
+  try {
+    return await handler.fetch(req)
+  } finally {
+    await handler.close()
+  }
+}
+
+/** Both MCP eras on one URL, no sessions. isLegacyRequest picks the path. */
 export async function handleMcp(req: Request) {
   if (req.method === "OPTIONS") return new Response(null, { status: 204, headers: CORS_HEADERS })
   if (req.method === "GET" && (req.headers.get("accept") ?? "").includes("text/html")) {
     return Response.redirect(new URL("/docs#mcp", req.url).toString(), 302)
   }
-  const transport = new WebStandardStreamableHTTPServerTransport({ sessionIdGenerator: undefined, enableJsonResponse: true })
-  const server = buildServer(req)
-  await server.connect(transport)
-  const res = await transport.handleRequest(req)
+  const res = (await isLegacyRequest(req)) ? await serveLegacy(req) : await serveModern(req)
   const headers = new Headers(res.headers)
   for (const [k, v] of Object.entries(CORS_HEADERS)) headers.set(k, v)
   return new Response(res.body, { status: res.status, headers })
