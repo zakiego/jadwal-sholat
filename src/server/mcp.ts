@@ -1,4 +1,4 @@
-import { McpServer, WebStandardStreamableHTTPServerTransport } from "@modelcontextprotocol/server"
+import { createMcpHandler, isLegacyRequest, McpServer, WebStandardStreamableHTTPServerTransport } from "@modelcontextprotocol/server"
 import { CfWorkerJsonSchemaValidator } from "@modelcontextprotocol/server/validators/cf-worker"
 import { z } from "zod"
 import { searchCities } from "@/lib/cities"
@@ -133,16 +133,31 @@ function buildServer(req: Request) {
   return server
 }
 
-/** Stateless Streamable HTTP: a fresh server per request, JSON responses, no sessions. */
+/** 2025-era clients (initialize handshake): stateless Streamable HTTP, a fresh server per request, JSON responses. */
+async function serveLegacy(req: Request) {
+  const transport = new WebStandardStreamableHTTPServerTransport({ sessionIdGenerator: undefined, enableJsonResponse: true })
+  const server = buildServer(req)
+  await server.connect(transport)
+  return transport.handleRequest(req)
+}
+
+/** Spec 2026-07-28 clients: no handshake, the version rides in each request's _meta. Same tools. */
+async function serveModern(req: Request) {
+  const handler = createMcpHandler(() => buildServer(req), { legacy: "reject" })
+  try {
+    return await handler.fetch(req)
+  } finally {
+    await handler.close()
+  }
+}
+
+/** Both MCP eras on one URL, no sessions. isLegacyRequest picks the path. */
 export async function handleMcp(req: Request) {
   if (req.method === "OPTIONS") return new Response(null, { status: 204, headers: CORS_HEADERS })
   if (req.method === "GET" && (req.headers.get("accept") ?? "").includes("text/html")) {
     return Response.redirect(new URL("/docs#mcp", req.url).toString(), 302)
   }
-  const transport = new WebStandardStreamableHTTPServerTransport({ sessionIdGenerator: undefined, enableJsonResponse: true })
-  const server = buildServer(req)
-  await server.connect(transport)
-  const res = await transport.handleRequest(req)
+  const res = (await isLegacyRequest(req)) ? await serveLegacy(req) : await serveModern(req)
   const headers = new Headers(res.headers)
   for (const [k, v] of Object.entries(CORS_HEADERS)) headers.set(k, v)
   return new Response(res.body, { status: res.status, headers })
